@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Check if curl is installed
+if ! command -v curl &> /dev/null; then
+    echo "⚠️  curl is required but not installed" >&2
+    exit 1
+fi
+
 # Check if jq is installed
 if ! command -v jq &> /dev/null; then
     echo "⚠️  jq is required but not installed" >&2

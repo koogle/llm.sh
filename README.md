@@ -1,6 +1,6 @@
 # llm.sh
 
-A simple bash script to interact with LLMs from the command line. This is a KISS (Keep It Simple, Stupid) version with minimal dependencies, inspired by [Simon Willison's llm tool](https://github.com/simonw/llm).
+A simple bash script to interact with LLMs from the command line. Inspired by [Simon Willison's llm tool](https://github.com/simonw/llm) but trying to avoid dependencies. Only dependencies are curl and jq.
 
 ## Quick Install
 
@@ -47,5 +47,6 @@ Or manually:
 
 ## Requirements
 
+- `curl` (usually pre-installed)
 - `jq` - Install with `brew install jq` (macOS) or `apt-get install jq` (Ubuntu)
 - An OpenAI API key or compatible API endpoint
