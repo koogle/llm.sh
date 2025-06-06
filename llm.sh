@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Check if jq is installed
+if ! command -v jq &> /dev/null; then
+    echo "⚠️  jq is required but not installed" >&2
+    echo "Install with: brew install jq (macOS) or apt-get install jq (Ubuntu)" >&2
+    exit 1
+fi
+
 KEY=${OPENAI_API_KEY:-}
 [[ -z $KEY ]] && { echo "⚠️  OPENAI_API_KEY is not set" >&2; exit 1; }
 
