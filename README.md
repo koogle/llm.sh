@@ -1,4 +1,5 @@
-# bash_llm
+# llm.sh
+
 A simple bash script to interact with LLMs from the command line.
 
 ## Quick Install
