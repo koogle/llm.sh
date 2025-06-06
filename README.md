@@ -1,6 +1,6 @@
 # llm.sh
 
-A simple bash script to interact with LLMs from the command line.
+A simple bash script to interact with LLMs from the command line. This is a KISS (Keep It Simple, Stupid) version with minimal dependencies, inspired by [Simon Willison's llm tool](https://github.com/simonw/llm).
 
 ## Quick Install
 
