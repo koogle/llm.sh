@@ -8,11 +8,11 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-KEY=${OPENAI_API_KEY:-}
-[[ -z $KEY ]] && { echo "⚠️  OPENAI_API_KEY is not set" >&2; exit 1; }
+KEY=${LLM_SH_API_KEY:-}
+[[ -z $KEY ]] && { echo "⚠️  LLM_SH_API_KEY is not set" >&2; exit 1; }
 
-URL=${OPENAI_URL:-https://api.openai.com/v1/chat/completions}
-MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+URL=${LLM_SH_URL:-https://api.openai.com/v1/chat/completions}
+MODEL=${LLM_SH_MODEL:-gpt-4o-mini}
 
 [[ $# -eq 0 ]] && { echo "usage: $(basename "$0") <prompt>"; exit 2; }
 PROMPT=$*
