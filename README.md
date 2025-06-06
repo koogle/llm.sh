@@ -1,7 +1,18 @@
 # bash_llm
 A simple bash script to interact with LLMs from the command line.
 
-## Setup
+## Quick Install
+
+```bash
+./install.sh
+```
+
+This will:
+- Install the script as `llm` command in `~/.local/bin`
+- Prompt for your OpenAI API key and save it to your shell config
+- Add `~/.local/bin` to your PATH
+
+## Manual Setup
 
 1. Make the script executable:
    ```bash
@@ -21,10 +32,16 @@ A simple bash script to interact with LLMs from the command line.
 
 ## Usage
 
+After installation:
+```bash
+llm "What is the capital of France?"
+llm "Explain quantum computing in simple terms"
+llm write a haiku about coding
+```
+
+Or manually:
 ```bash
 ./llm.sh "What is the capital of France?"
-./llm.sh "Explain quantum computing in simple terms"
-./llm.sh write a haiku about coding
 ```
 
 ## Requirements
