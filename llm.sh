@@ -20,10 +20,19 @@ PROMPT=$*
 curl -sS -N "$URL" \
   -H "Authorization: Bearer $KEY" \
   -H "Content-Type: application/json" \
-  -d @- <<EOF |
+  -d @- <<EOF 2>/dev/null |
 { "model": "$MODEL",
   "stream": true,
   "messages": [ { "role": "user", "content": "$PROMPT" } ] }
 EOF
-jq -r --unbuffered 'select(.choices?) | .choices[0].delta.content // empty'
+while IFS= read -r line || [[ -n "$line" ]]; do
+    if [[ -n "$line" && "$line" == data:* ]]; then
+        json_part="${line#data: }"
+        if [[ "$json_part" != "[DONE]" && -n "$json_part" ]]; then
+            content=$(echo "$json_part" | jq -r 'select(type == "object" and .choices?) | .choices[0].delta.content // empty' 2>/dev/null || true)
+            [[ -n "$content" && "$content" != "null" ]] && printf "%s" "$content"
+        fi
+    fi
+done
+echo
 
