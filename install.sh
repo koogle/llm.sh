@@ -3,6 +3,12 @@ set -euo pipefail
 
 echo "🤖 Installing bash_llm..."
 
+# Check if curl is installed
+if ! command -v curl &> /dev/null; then
+    echo "❌ curl is required but not installed"
+    exit 1
+fi
+
 # Check if jq is installed
 if ! command -v jq &> /dev/null; then
     echo "❌ jq is required but not installed"
