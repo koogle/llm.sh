@@ -37,7 +37,11 @@ while IFS= read -r line || [[ -n "$line" ]]; do
         json_part="${line#data: }"
         if [[ "$json_part" != "[DONE]" && -n "$json_part" ]]; then
             content=$(echo "$json_part" | jq -r 'select(type == "object" and .choices?) | .choices[0].delta.content // empty' 2>/dev/null || true)
-            [[ -n "$content" && "$content" != "null" ]] && printf "%s" "$content"
+            if [[ -n "$content" && "$content" != "null" ]]; then
+                # Debug: show what we're getting
+                echo "DEBUG: Raw content: $(echo "$content" | od -c)" >&2
+                printf "%s" "$content"
+            fi
         fi
     fi
 done
