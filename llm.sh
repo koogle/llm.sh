@@ -14,6 +14,9 @@ KEY=${LLM_SH_API_KEY:-}
 URL=${LLM_SH_URL:-https://api.openai.com/v1/chat/completions}
 MODEL=${LLM_SH_MODEL:-gpt-4o-mini}
 
+# Track code block state for syntax highlighting
+in_code_block="false"
+
 
 [[ $# -eq 0 ]] && { echo "usage: $(basename "$0") <prompt>"; exit 2; }
 PROMPT=$*
@@ -37,7 +40,24 @@ while IFS= read -r line || [[ -n "$line" ]]; do
                 content="${content%%\"*}"
                 # Decode \n sequences to actual newlines
                 content="${content//\\n/$'\n'}"
-                printf "%s" "$content"
+                
+                # Simple syntax highlighting for code blocks
+                if [[ "$content" == '```'* ]]; then
+                    # Start of code block - dim gray
+                    printf "\033[2;37m%s\033[0m" "$content"
+                elif [[ "$in_code_block" == "true" ]]; then
+                    # Inside code block - cyan
+                    printf "\033[0;36m%s\033[0m" "$content"
+                    if [[ "$content" == *'```' ]]; then
+                        in_code_block="false"
+                    fi
+                else
+                    # Regular text
+                    printf "%s" "$content"
+                    if [[ "$content" == *'```'* ]]; then
+                        in_code_block="true"
+                    fi
+                fi
             fi
         fi
     fi
