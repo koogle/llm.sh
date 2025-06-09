@@ -20,6 +20,7 @@ KEY=${LLM_SH_API_KEY:-}
 URL=${LLM_SH_URL:-https://api.openai.com/v1/chat/completions}
 MODEL=${LLM_SH_MODEL:-gpt-4o-mini}
 
+
 [[ $# -eq 0 ]] && { echo "usage: $(basename "$0") <prompt>"; exit 2; }
 PROMPT=$*
 
@@ -36,7 +37,10 @@ while IFS= read -r line || [[ -n "$line" ]]; do
         json_part="${line#data: }"
         if [[ "$json_part" != "[DONE]" && -n "$json_part" ]]; then
             content=$(echo "$json_part" | jq -r 'select(type == "object" and .choices?) | .choices[0].delta.content // empty' 2>/dev/null || true)
-            [[ -n "$content" && "$content" != "null" ]] && printf "%s" "$content"
+            if [[ -n "$content" && "$content" != "null" ]]; then
+                # jq -r already unescapes the JSON, so just print as-is
+                printf '%s' "$content"
+            fi
         fi
     fi
 done
