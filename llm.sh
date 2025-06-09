@@ -37,10 +37,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
         json_part="${line#data: }"
         if [[ "$json_part" != "[DONE]" && -n "$json_part" ]]; then
             content=$(echo "$json_part" | jq -r 'select(type == "object" and .choices?) | .choices[0].delta.content // empty' 2>/dev/null || true)
-            if [[ -n "$content" && "$content" != "null" ]]; then
-                # jq -r already unescapes the JSON, so just print as-is
-                printf '%s' "$content"
-            fi
+            [[ -n "$content" && "$content" != "null" ]] && printf "%s" "$content"
         fi
     fi
 done
