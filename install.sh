@@ -9,12 +9,6 @@ if ! command -v curl &> /dev/null; then
     exit 1
 fi
 
-# Check if jq is installed
-if ! command -v jq &> /dev/null; then
-    echo "❌ jq is required but not installed"
-    echo "Install with: brew install jq (macOS) or apt-get install jq (Ubuntu)"
-    exit 1
-fi
 
 # Get API key from user
 echo

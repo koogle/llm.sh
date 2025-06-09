@@ -7,12 +7,6 @@ if ! command -v curl &> /dev/null; then
     exit 1
 fi
 
-# Check if jq is installed
-if ! command -v jq &> /dev/null; then
-    echo "⚠️  jq is required but not installed" >&2
-    echo "Install with: brew install jq (macOS) or apt-get install jq (Ubuntu)" >&2
-    exit 1
-fi
 
 KEY=${LLM_SH_API_KEY:-}
 [[ -z $KEY ]] && { echo "⚠️  LLM_SH_API_KEY is not set" >&2; exit 1; }
@@ -36,10 +30,13 @@ while IFS= read -r line || [[ -n "$line" ]]; do
     if [[ -n "$line" && "$line" == data:* ]]; then
         json_part="${line#data: }"
         if [[ "$json_part" != "[DONE]" && -n "$json_part" ]]; then
-            content=$(echo "$json_part" | jq -r 'select(type == "object" and .choices?) | .choices[0].delta.content // empty' 2>/dev/null || true)
-            if [[ -n "$content" && "$content" != "null" ]]; then
-                # Debug: show what we're getting
-                echo "DEBUG: Raw content: $(echo "$content" | od -c)" >&2
+            # Extract content directly with string manipulation
+            if [[ "$json_part" == *'"content":"'* ]]; then
+                # Extract everything between "content":" and the next "
+                content="${json_part#*\"content\":\"}"
+                content="${content%%\"*}"
+                # Decode \n sequences to actual newlines
+                content="${content//\\n/$'\n'}"
                 printf "%s" "$content"
             fi
         fi
