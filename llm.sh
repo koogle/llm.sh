@@ -36,8 +36,12 @@ while IFS= read -r line || [[ -n "$line" ]]; do
                 # Extract everything between "content":" and the next "
                 content="${json_part#*\"content\":\"}"
                 content="${content%%\"*}"
-                # Decode \n sequences to actual newlines
+                # Decode JSON escape sequences
                 content="${content//\\n/$'\n'}"
+                content="${content//\\r/$'\r'}"
+                content="${content//\\t/$'\t'}"
+                content="${content//\\\"/\"}"
+                content="${content//\\\\/\\}"
                 
                 printf "%s" "$content"
             fi
